@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv bash
+
+exec /usr/sbin/openvpn --script-security 2 --config /ovpn.conf --auth-user-pass /creds.txt

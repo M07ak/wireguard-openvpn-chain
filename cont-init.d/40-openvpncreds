@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+FILE=/creds.txt
+if [ -f "$FILE" ]; then
+    echo "$FILE exists."
+else 
+    echo "$FILE does not exist. Populate creds inside"
+    echo "$OVPN_USERNAME" >> $FILE
+    echo "$OVPN_PASSWORD" >> $FILE
+    cat $FILE
+fi
+
+

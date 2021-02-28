@@ -1,0 +1,46 @@
+services:
+  protonch:
+    image: m07ak/wireguard-openvpn-chain:latest
+    build:
+      context: .
+      dockerfile: dockerfile
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - SERVERURL=${SERVER1_URL}
+      - SERVERPORT=${SERVER1_PORT}
+      - PEERS=${SERVER1_PEERS}
+      - INTERNAL_SUBNET=${SERVER1_INTERNAL_SUBNET}
+      - OVPN_USERNAME=${SERVER1_OVPN_USERNAME}
+      - OVPN_PASSWORD=${SERVER1_OVPN_PASSWORD}
+      - PEERDNS=auto #optional
+    volumes:
+      - '${SERVER1_OVPN_FILE}:/ovpn.conf'
+      - '${SERVER1_CONFIG_FOLDER}:/config'
+      - '/lib/modules:/lib/modules'
+    devices:
+      - /dev/net/tun
+    ports:
+      - ${SERVER1_PORT}:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+    depends_on:
+      - "pihole"
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    network_mode: host
+    environment:
+      TZ: 'Europe/Paris'
+      WEBPASSWORD: ${PIHOLE_PASSWORD}
+    volumes:
+      - '${PIHOLE_VOLUME}/etc-pihole/:/etc/pihole/'
+      - '${PIHOLE_VOLUME}/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
