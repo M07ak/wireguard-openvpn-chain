@@ -19,7 +19,7 @@ def periodically_schedule_tasks():
   if relative_clock >= 60*60*24:
     relative_clock = 0
   
-  if relative_clock % 60 == 0: #Every 3 hours
+  if relative_clock % 60 * 60 * 3 == 0: #Every 3 hours
     if not OVPN_READY:
       print("Ovpn down. Force restart")
       restart_ovpn()
