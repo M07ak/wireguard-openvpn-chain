@@ -1,1 +1,2 @@
 # wireguard-openvpn-chain
+Chain a wireguard server with an Open Vpn client and a DNS resolver. Share the same OpenVpn client connection with multiple users through Wireguard light vpn connections, based and Docker & Docker Compose.
